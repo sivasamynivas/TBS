@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Residential Building Estimate | Thulasimani Builders</title>
+<meta name="description" content="Interactive cost estimate for a residential building: 550 sq.ft built-up area plus a 630 sq.ft shed. Total ₹17,08,300.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧱</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E8E9E4; --surface:#F5F5F1; --ink:#1B2529; --muted:#5B666B; --line:#C3C6BE;
+  --brick:#8C3B2B; --slate:#4A5A63; --ochre:#C99A2E; --teal:#3A7573; --plum:#7A5775; --blue:#2D5B88; --olive:#7F8570;
+  --display:'Archivo','Arial Narrow',Arial,sans-serif; --body:'Source Sans 3','Segoe UI',Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 22px}
+h1,h2,h3{font-family:var(--display);line-height:1.05;letter-spacing:-.01em}
+h2{font-size:clamp(28px,4vw,42px);font-weight:800;margin-bottom:10px}
+.lede{max-width:62ch;color:var(--muted);margin-bottom:28px}
+section{padding:64px 0;border-top:1px solid var(--line)}
+
+/* nav */
+nav{position:sticky;top:0;z-index:20;background:rgba(232,233,228,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:20px;height:52px;overflow-x:auto;white-space:nowrap}
+nav strong{font-family:var(--display);font-weight:800;margin-right:auto}
+nav a{text-decoration:none;font-size:15px;color:var(--muted);font-weight:600}
+nav a:hover{color:var(--ink)}
+nav button{border:1px solid var(--ink);background:var(--ink);color:var(--bg);padding:5px 14px;border-radius:3px;cursor:pointer;font-weight:600;font-size:14px}
+
+/* hero */
+.hero{padding:56px 0 48px;border:0}
+.hero h1{font-size:clamp(40px,8vw,92px);font-weight:900;max-width:14ch}
+.hero .sub{margin-top:14px;color:var(--muted);max-width:56ch;font-size:19px}
+.hero-total{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 24px;margin:34px 0 8px}
+.hero-total .num{font-family:var(--display);font-weight:900;font-size:clamp(44px,9vw,104px);line-height:1;color:var(--brick);font-variant-numeric:tabular-nums}
+.hero-total .words{color:var(--muted);font-size:16px}
+.wall-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin:34px 0 10px;flex-wrap:wrap}
+.wall-head h3{font-size:20px;font-weight:800}
+.wall-head p{color:var(--muted);font-size:15px}
+.wall{display:flex;flex-direction:column;gap:3px;height:520px;background:#bdbfb7;padding:3px;border-radius:3px}
+.course{display:flex;gap:3px;min-height:38px}
+.brick{position:relative;border:0;cursor:pointer;text-align:left;padding:8px 10px;overflow:hidden;color:#fff;display:flex;flex-direction:column;justify-content:flex-start;min-width:0;transition:filter .15s,transform .15s}
+.brick:hover,.brick:focus-visible{filter:brightness(1.18);z-index:2}
+.brick.dim{filter:grayscale(.85) opacity(.35)}
+.brick b{font-family:var(--display);font-size:14px;line-height:1.15;font-weight:700}
+.brick span{font-size:14px;font-variant-numeric:tabular-nums;opacity:.92}
+.brick.tiny b,.brick.tiny span{display:none}
+.legend{display:flex;flex-wrap:wrap;gap:8px 8px;margin-top:14px}
+.legend button{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);padding:5px 12px 5px 8px;border-radius:30px;cursor:pointer;font-size:15px}
+.legend button[aria-pressed=true]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.dot{width:12px;height:12px;border-radius:2px;display:inline-block}
+.tip{position:fixed;pointer-events:none;z-index:50;background:var(--ink);color:#fff;padding:9px 12px;border-radius:3px;font-size:14px;max-width:260px;opacity:0;transition:opacity .1s}
+.tip b{display:block;font-family:var(--display)}
+
+/* project sheet */
+.sheet{display:grid;grid-template-columns:1fr 1fr;gap:36px}
+dl{background:var(--surface);border:1px solid var(--line)}
+dl div{display:grid;grid-template-columns:150px 1fr;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line)}
+dl div:last-child{border:0}
+dt{font-weight:700;color:var(--muted);font-size:15px}
+dd{font-weight:600}
+.areas{display:flex;flex-direction:column;gap:16px;background:var(--surface);border:1px solid var(--line);padding:22px}
+.area-row .top{display:flex;justify-content:space-between;font-weight:600;margin-bottom:5px}
+.area-row .track{height:26px;background:#dcded7}
+.area-row .fill{height:100%;width:0;transition:width 1s cubic-bezier(.2,.7,.2,1)}
+.areas small{color:var(--muted);font-size:14px;line-height:1.4}
+.math{font-family:var(--display);font-weight:700;font-size:15px;background:var(--ink);color:var(--bg);padding:10px 14px;margin-top:2px}
+
+/* sequence */
+.steps{display:flex;gap:0;margin-bottom:22px;overflow-x:auto}
+.steps button{flex:1;min-width:112px;border:0;border-bottom:6px solid var(--line);background:none;padding:14px 8px 10px;text-align:left;cursor:pointer;font-family:var(--display);font-weight:700;font-size:18px;color:var(--muted)}
+.steps button[aria-selected=true]{border-color:var(--brick);color:var(--ink)}
+.steps button small{display:block;font-family:var(--body);font-weight:400;font-size:14px}
+.stage{background:var(--surface);border:1px solid var(--line);padding:22px;min-height:150px}
+.stage p{max-width:64ch;margin-bottom:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--bg);padding:6px 12px;border-radius:3px;font-size:15px;cursor:pointer}
+.chip:hover{border-color:var(--ink)}
+.chip b{font-variant-numeric:tabular-nums;margin-left:6px}
+.stage .sum{margin-top:16px;font-weight:700}
+
+/* table */
+.tools{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:14px;align-items:center}
+.tools input[type=search]{flex:1;min-width:200px;padding:10px 14px;border:1px solid var(--line);background:var(--surface);border-radius:3px}
+.tools select{padding:10px 12px;border:1px solid var(--line);background:var(--surface);border-radius:3px}
+.tools button.plain{padding:10px 14px;border:1px solid var(--ink);background:none;border-radius:3px;cursor:pointer;font-weight:600}
+.tblwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;min-width:680px}
+th{text-align:left;font-size:14px;color:var(--muted);padding:12px 14px;border-bottom:2px solid var(--ink)}
+th.r,td.r{text-align:right}
+td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr.item{cursor:pointer}
+tr.item:hover td{background:#ececE6}
+tr.item.flash td{animation:flash 1.6s}
+@keyframes flash{0%,40%{background:#f1dd9a}100%{background:transparent}}
+td.nm{font-weight:700}
+td.nm .no{display:inline-block;min-width:26px;color:var(--muted);font-weight:600}
+.pill{display:inline-flex;align-items:center;gap:7px;font-size:14px;white-space:nowrap}
+td.amt{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+.share{display:block;height:5px;margin-top:6px;background:#dcded7;min-width:70px}
+.share i{display:block;height:100%}
+tr.detail td{background:#eeeee9;padding:14px 14px 18px 54px}
+tr.detail[hidden]{display:none}
+tr.detail p{max-width:70ch;margin-bottom:6px}
+tr.detail .basis{font-size:15px;color:var(--muted)}
+tfoot td{font-weight:800;font-family:var(--display);font-size:18px;border-top:2px solid var(--ink);border-bottom:0}
+.sub-note{font-size:15px;color:var(--muted);margin-top:10px}
+
+/* analysis */
+.an{display:grid;grid-template-columns:minmax(260px,380px) 1fr;gap:40px;align-items:start}
+.donut{position:relative;width:100%;max-width:380px;aspect-ratio:1}
+.donut svg{width:100%;height:100%;transform:rotate(-90deg)}
+.donut circle{fill:none;stroke-width:15;cursor:pointer;transition:stroke-width .15s,opacity .15s}
+.donut circle:hover,.donut circle.on{stroke-width:19}
+.donut .mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24%}
+.donut .mid b{font-family:var(--display);font-size:clamp(22px,3.2vw,32px);font-weight:900;font-variant-numeric:tabular-nums}
+.donut .mid span{font-size:14px;color:var(--muted);line-height:1.3}
+.cats{display:flex;flex-direction:column;gap:10px}
+.cat{display:grid;grid-template-columns:20px 1fr auto;gap:4px 12px;align-items:center;background:var(--surface);border:1px solid var(--line);padding:11px 14px;cursor:pointer;text-align:left;width:100%}
+.cat:hover,.cat.on{border-color:var(--ink)}
+.cat .nm{font-weight:700}
+.cat .v{font-variant-numeric:tabular-nums;font-weight:700}
+.cat small{grid-column:2/4;color:var(--muted);font-size:14px}
+.bars{margin-top:44px}
+.bars h3{font-size:22px;margin-bottom:14px}
+.hb{display:grid;grid-template-columns:minmax(120px,210px) 1fr 90px;gap:12px;align-items:center;padding:3px 0;font-size:15px}
+.hb .t{height:16px;background:#dcded7}
+.hb .t i{display:block;height:100%;width:0;transition:width .9s cubic-bezier(.2,.7,.2,1)}
+.hb .a{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+
+/* what-if */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.panel{background:var(--surface);border:1px solid var(--line);padding:22px}
+.panel h3{font-size:20px;margin-bottom:16px}
+.fld{margin-bottom:16px}
+.fld label{display:flex;justify-content:space-between;font-weight:600;margin-bottom:6px;font-size:16px}
+.fld output{font-variant-numeric:tabular-nums;color:var(--brick)}
+.fld input[type=number]{width:100%;padding:9px 12px;border:1px solid var(--line);background:#fff;border-radius:3px}
+.fld input[type=range]{width:100%;accent-color:var(--brick)}
+.result{background:var(--ink);color:var(--bg);padding:26px;display:flex;flex-direction:column;gap:6px}
+.result .big{font-family:var(--display);font-weight:900;font-size:clamp(36px,6vw,58px);line-height:1;font-variant-numeric:tabular-nums}
+.result .delta{font-weight:700;font-size:18px}
+.result .delta.up{color:#f0a393}.result .delta.down{color:#a6d9b4}
+.result p{color:#b9c2c5;font-size:15px}
+.result button{align-self:flex-start;margin-top:12px;background:none;border:1px solid var(--bg);color:var(--bg);padding:8px 16px;border-radius:3px;cursor:pointer;font-weight:600}
+.break{margin-top:14px;border-top:1px solid #3b484d;padding-top:12px;font-size:15px}
+.break div{display:flex;justify-content:space-between;padding:2px 0;font-variant-numeric:tabular-nums}
+
+/* notes */
+.notes{columns:2;column-gap:40px}
+.notes li{break-inside:avoid;margin:0 0 14px 20px}
+.sign{margin-top:36px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.sign div{border-top:2px solid var(--ink);padding-top:8px}
+.sign small{display:block;color:var(--muted);font-size:14px}
+footer{padding:28px 0 48px;border-top:1px solid var(--line);color:var(--muted);font-size:15px}
+
+@media(max-width:860px){
+  .sheet,.an,.calc{grid-template-columns:1fr}
+  .notes{columns:1}.sign{grid-template-columns:1fr}
+  .wall{height:620px}
+  dl div{grid-template-columns:120px 1fr}
+  .hb{grid-template-columns:110px 1fr 76px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+@media print{
+  nav,.tools,.legend,.result button,.steps{display:none}
+  body{background:#fff}section{padding:26px 0;break-inside:avoid}
+  tr.detail[hidden]{display:table-row}
+  .wall{height:420px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <strong>Thulasimani Builders</strong>
+    <a href="#project">Project</a>
+    <a href="#sequence">Sequence</a>
+    <a href="#estimate">Estimate</a>
+    <a href="#analysis">Analysis</a>
+    <a href="#whatif">What-if</a>
+    <a href="#notes">Notes</a>
+    <button onclick="window.print()">Print / save PDF</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Residential building estimate</h1>
+    <p class="sub">Quantity and cost analysis for a 550 sq.ft residential built-up area with a separate 630 sq.ft shed, prepared for Er. N. Balaji.</p>
+    <div class="hero-total">
+      <div class="num" id="heroTotal" aria-live="off">₹0</div>
+      <div class="words" id="heroWords"></div>
+    </div>
+
+    <div class="wall-head">
+      <h3>The cost wall</h3>
+      <p>Each brick is one estimate item, sized by its cost. Hover for detail, click to jump to the line item.</p>
+    </div>
+    <div class="wall" id="wall" role="list"></div>
+    <div class="legend" id="legend"></div>
+  </div>
+</header>
+
+<section id="project">
+  <div class="wrap">
+    <h2>Project basis</h2>
+    <p class="lede">The ground floor is a 100 sq.ft slab cast on its own. The first-floor room measures 12.5 ft by 36 ft. The shed is priced separately from the residential area.</p>
+    <div class="sheet">
+      <dl>
+        <div><dt>Client</dt><dd>Er. N. Balaji (AE, TWAD, Thanjavur)</dd></div>
+        <div><dt>Engineers</dt><dd>Er. S. Gangatharam, B.E.<br>Er. G. Mahindh Varshan, B.E.</dd></div>
+        <div><dt>Builder</dt><dd>Thulasimani Builders</dd></div>
+        <div><dt>Project type</dt><dd>Residential building</dd></div>
+        <div><dt>Room dimension</dt><dd>12.5 ft × 36 ft</dd></div>
+        <div><dt>Wall height</dt><dd>10 ft</dd></div>
+        <div><dt>Masonry</dt><dd>Wire-cut red bricks, double water-wash M-Sand</dd></div>
+        <div><dt>Structure</dt><dd>1.5 tonne JSW steel, 14 m³ concrete, Dalmia cement, M-Sand, 0.75 jelly</dd></div>
+      </dl>
+      <div class="areas" id="areas">
+        <div class="math">12.5 ft × 36 ft = 450 sq.ft &nbsp;|&nbsp; 100 + 450 = 550 sq.ft</div>
+        <small>Bars are drawn to the same scale. Hover or tap a bar to see how the area is made up.</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sequence">
+  <div class="wrap">
+    <h2>Work sequence</h2>
+    <p class="lede">Select a stage to see which estimate items fall under it. The order is indicative and follows the typical flow of site work.</p>
+    <div class="steps" id="steps" role="tablist"></div>
+    <div class="stage" id="stage" role="tabpanel"></div>
+  </div>
+</section>
+
+<section id="estimate">
+  <div class="wrap">
+    <h2>Detailed estimate</h2>
+    <p class="lede">Twenty line items. Select a row to read its scope and costing basis.</p>
+    <div class="tools">
+      <input type="search" id="q" placeholder="Search items, brands or materials" aria-label="Search items">
+      <select id="catSel" aria-label="Filter by category"></select>
+      <select id="sortSel" aria-label="Sort items">
+        <option value="no">Sort by item number</option>
+        <option value="desc">Highest cost first</option>
+        <option value="asc">Lowest cost first</option>
+      </select>
+      <button class="plain" id="toggleAll">Expand all</button>
+    </div>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>Item</th><th>Category</th><th class="r">Amount</th></tr></thead>
+        <tbody id="tbody"></tbody>
+        <tfoot><tr><td colspan="2" id="footLabel">Total</td><td class="r" id="footAmt"></td></tr></tfoot>
+      </table>
+    </div>
+    <p class="sub-note">Section subtotals in the source report: items 1 to 4 ₹4,74,400; items 5 to 8 ₹3,26,500; items 9 to 12 ₹3,60,000; items 13 to 20 ₹5,47,400.</p>
+  </div>
+</section>
+
+<section id="analysis">
+  <div class="wrap">
+    <h2>Where the money goes</h2>
+    <p class="lede">Select a category to filter the wall and the table together.</p>
+    <div class="an">
+      <div class="donut" id="donut">
+        <svg viewBox="0 0 100 100" id="donutSvg" aria-label="Cost distribution by category"></svg>
+        <div class="mid"><b id="dMid">₹17,08,300</b><span id="dLbl">Total estimate</span></div>
+      </div>
+      <div class="cats" id="cats"></div>
+    </div>
+    <div class="bars">
+      <h3>Item-wise comparison</h3>
+      <div id="hbars"></div>
+    </div>
+  </div>
+</section>
+
+<section id="whatif">
+  <div class="wrap">
+    <h2>What-if calculator</h2>
+    <p class="lede">Change the shed, brick or labour assumptions and see the total move. Everything else stays at the estimate values.</p>
+    <div class="calc">
+      <div class="panel">
+        <h3>Assumptions</h3>
+        <div class="fld"><label for="cShedA">Shed area (sq.ft)</label><input type="number" id="cShedA" value="630" min="0" step="10"></div>
+        <div class="fld"><label for="cShedR">Shed rate (₹ per sq.ft)</label><input type="number" id="cShedR" value="480" min="0" step="10"></div>
+        <div class="fld"><label for="cBrN">Number of bricks</label><input type="number" id="cBrN" value="11000" min="0" step="500"></div>
+        <div class="fld"><label for="cBrR">Brick rate (₹ each)</label><input type="number" id="cBrR" value="10" min="0" step="0.5"></div>
+        <div class="fld"><label for="cLab">Civil labour change <output id="oLab">0%</output></label><input type="range" id="cLab" min="-20" max="30" value="0"></div>
+        <div class="fld"><label for="cVar">Market variation on total <output id="oVar">0%</output></label><input type="range" id="cVar" min="-10" max="20" value="0"></div>
+      </div>
+      <div class="result">
+        <p>Revised estimate</p>
+        <div class="big" id="rTotal"></div>
+        <div class="delta" id="rDelta"></div>
+        <p id="rWords"></p>
+        <div class="break" id="rBreak"></div>
+        <button id="reset">Reset to estimate</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="notes">
+  <div class="wrap">
+    <h2>Notes and corrections</h2>
+    <p class="lede">What the estimating team asks the reader to keep in mind.</p>
+    <ul class="notes">
+      <li>The shed is calculated as 630 sq.ft × ₹480 per sq.ft = ₹3,02,400.</li>
+      <li>Plastering cement is set at 40 bags, giving a plastering total of ₹32,800.</li>
+      <li>The SYNTAX water tank (₹15,000) is an additional cost, separate from electrical and plumbing.</li>
+      <li>Transportation, lift setup and miscellaneous are ₹10,000 each.</li>
+      <li>Use comparative quotations for steel, cement, bricks, tiles, doors, UPVC, electrical and plumbing materials.</li>
+      <li>Check structural quantities against approved drawings and reinforcement schedules before work starts.</li>
+      <li>Final spend can change with market rates, taxes, design revisions, site conditions, transport and labour availability.</li>
+      <li>Quantities stay as supplied in the project scope. Where both a quantity and a rate were given, the product is used.</li>
+    </ul>
+    <div class="sign">
+      <div>Er. S. Gangatharam, B.E.<small>Engineer, Thulasimani Builders</small></div>
+      <div>Er. G. Mahindh Varshan, B.E.<small>Engineer, Thulasimani Builders</small></div>
+      <div>Er. N. Balaji<small>Client, AE TWAD Thanjavur</small></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Thulasimani Builders. Residential building estimate. Figures are budget estimates and not a contract price.</div>
+</footer>
+
+<div class="tip" id="tip"></div>
+
+<script>
+/* ---------- data ---------- */
+const CATS = {
+  civil:{name:'Civil & Structural',color:'#8C3B2B',text:'#fff'},
+  shed:{name:'Shed',color:'#4A5A63',text:'#fff'},
+  labour:{name:'Labour & Professional',color:'#C99A2E',text:'#1B2529'},
+  finish:{name:'Finishes',color:'#3A7573',text:'#fff'},
+  doors:{name:'Doors, Windows & Grill',color:'#7A5775',text:'#fff'},
+  elec:{name:'Electrical & Plumbing',color:'#2D5B88',text:'#fff'},
+  misc:{name:'Logistics & Misc.',color:'#7F8570',text:'#fff'}
+};
+const ITEMS = [
+ {n:1,name:'Brick work',amt:134600,cat:'civil',basis:'11,000 bricks @ ₹10; 35 cement bags; 200 CFT M-Sand',desc:'Wire-cut red bricks with double water-wash M-Sand for masonry. Stated wall height is 10 ft.'},
+ {n:2,name:'R.C. concrete works',amt:207000,cat:'civil',basis:'1.5 tonne steel; 14 m³ concrete; 100 cement bags; 2.5 units M-Sand; 5 units jelly',desc:'JSW reinforcement steel, Dalmia cement, M-Sand and 0.75 jelly for the stated structural concrete scope.'},
+ {n:3,name:'Plastering',amt:32800,cat:'finish',basis:'2,700 sq.ft; 40 cement bags; 250 CFT P-Sand',desc:'Based on 2,700 sq.ft of surface with Chettinad cement and P-Sand. Cement provision raised to 40 bags.'},
+ {n:4,name:'Painting',amt:100000,cat:'finish',basis:'As specified',desc:'Internal: 1 coat white wash, 2 coats putty, 1 coat primer, 1 coat emulsion. External: 1 coat white wash, 2 coats primer, 1 coat exterior emulsion.'},
+ {n:5,name:'Carpentry works',amt:45000,cat:'doors',basis:'Hall and bedroom doors with fittings',desc:'Hall: Kerala teak frame and teak door. Bedroom: Mahogany frame with ready-made flush door. Medium-budget fittings and Europa locks.'},
+ {n:6,name:'Bath door, UPVC & grill',amt:56500,cat:'doors',basis:'65 sq.ft UPVC; 65 sq.ft grill',desc:'WBC bath door, UPVC work and grill work at the stated quantities. EITI or M-SQUARE are the UPVC options.'},
+ {n:7,name:'Tile flooring & bath',amt:110000,cat:'finish',basis:'₹65 per sq.ft purchasing basis',desc:'Tile procurement budgeted at ₹65 per sq.ft for flooring and bathroom requirements.'},
+ {n:8,name:'Electrical & plumbing',amt:115000,cat:'elec',basis:'6 spot lights; 2 fan points; swing point; AC and heater provisions; specified modules',desc:'FYBROS wire, FINOLEX pipe, GI module boxes and Legrand or Alljy fittings. Plumbing uses Aashirvadh pipes, with CPVC for hot water and UPVC for cold water.'},
+ {n:9,name:'SYNTAX water tank',amt:15000,cat:'elec',basis:'Additional provision',desc:'SYNTAX water storage, treated as an additional cost separate from the electrical and plumbing allocation.'},
+ {n:10,name:'Sunshade & loft',amt:50000,cat:'civil',basis:'55 sq.ft',desc:'Sunshade and loft works for the stated 55 sq.ft scope.'},
+ {n:11,name:'Parapet wall',amt:20000,cat:'civil',basis:'As required',desc:'Parapet wall construction, included as a separate masonry and structural finishing provision.'},
+ {n:12,name:'Civil labour',amt:275000,cat:'labour',basis:'Lump-sum',desc:'Manpower for the planned civil works and associated site activities.'},
+ {n:13,name:'Engineer salary',amt:60000,cat:'labour',basis:'As agreed',desc:'Engineering supervision and technical coordination, held as a dedicated project provision.'},
+ {n:14,name:'Shed',amt:302400,cat:'shed',basis:'630 sq.ft × ₹480 per sq.ft',desc:'Calculated from the corrected stated area and unit rate.'},
+ {n:15,name:'Elevation',amt:110000,cat:'finish',basis:'Budget allocation',desc:'A dedicated budget for the front elevation and architectural appearance of the residence.'},
+ {n:16,name:'Waterproofing',amt:10000,cat:'finish',basis:'Lump-sum',desc:'Allowance for wet and exposed areas to reduce the risk of water ingress.'},
+ {n:17,name:'Cooling tiles',amt:35000,cat:'finish',basis:'Lump-sum',desc:'Roof heat-mitigation and thermal comfort provision.'},
+ {n:18,name:'Transportation',amt:10000,cat:'misc',basis:'Lump-sum',desc:'Material transport and site logistics as a separate allowance.'},
+ {n:19,name:'Lift setup',amt:10000,cat:'misc',basis:'Lump-sum',desc:'Allowance for lift setup and installation-related provision.'},
+ {n:20,name:'Miscellaneous',amt:10000,cat:'misc',basis:'Lump-sum',desc:'Contingency for minor works, consumables and unforeseen site-level requirements.'}
+];
+const TOTAL = ITEMS.reduce((s,i)=>s+i.amt,0); // 1,708,300
+const STAGES = [
+ {name:'Structure',sub:'Slab, columns, beams',items:[2,10],text:'The ground-floor slab and first-floor RCC frame go up first, using JSW steel and Dalmia cement. Sunshade and loft slabs are cast with the structure.'},
+ {name:'Brickwork',sub:'Walls to 10 ft',items:[1,11],text:'Wire-cut red bricks are laid to a 10 ft wall height with double water-wash M-Sand. The parapet wall closes the roof edge.'},
+ {name:'Plaster',sub:'2,700 sq.ft',items:[3],text:'Walls are plastered with Chettinad cement and P-Sand over about 2,700 sq.ft of surface.'},
+ {name:'Services',sub:'Power and water',items:[8,9],text:'Electrical conduits, wiring and plumbing lines are laid before finishes. The SYNTAX water tank is budgeted on top of this allocation.'},
+ {name:'Finishes',sub:'Floors, doors, paint',items:[7,4,5,6,17,16],text:'Tiling, carpentry, UPVC and grill work, waterproofing, cooling tiles and the paint system complete the interior.'},
+ {name:'External',sub:'Shed and elevation',items:[15,14,18,19],text:'The front elevation, the separate shed, lift setup and transport round out the external and logistics work.'}
+];
+const inr = n => '₹'+Math.round(n).toLocaleString('en-IN');
+const $ = s => document.querySelector(s);
+const byNo = n => ITEMS.find(i=>i.n===n);
+
+function words(n){
+  n=Math.round(n); if(n===0) return 'Zero';
+  const a=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
+  const b=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+  const two=x=>x<20?a[x]:b[Math.floor(x/10)]+(x%10?' '+a[x%10]:'');
+  const three=x=>(x>=100?a[Math.floor(x/100)]+' Hundred'+(x%100?' ':''):'')+(x%100?two(x%100):'');
+  let out=[];
+  const cr=Math.floor(n/1e7); n%=1e7;
+  const lk=Math.floor(n/1e5); n%=1e5;
+  const th=Math.floor(n/1e3); n%=1e3;
+  if(cr) out.push(two(cr)+' Crore');
+  if(lk) out.push(two(lk)+' Lakh');
+  if(th) out.push(two(th)+' Thousand');
+  if(n) out.push(three(n));
+  return out.join(' ');
+}
+const rupeesWords = n => 'Rupees '+words(n)+' Only';
+
+/* ---------- hero ---------- */
+$('#heroWords').textContent = rupeesWords(TOTAL);
+(function countUp(){
+  const el=$('#heroTotal');
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches){el.textContent=inr(TOTAL);return}
+  const t0=performance.now(),dur=1400;
+  (function f(t){
+    const p=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-p,3);
+    el.textContent=inr(TOTAL*e);
+    if(p<1) requestAnimationFrame(f);
+  })(t0);
+})();
+
+/* ---------- state ---------- */
+let activeCat=null;
+
+/* ---------- wall ---------- */
+const tip=$('#tip');
+function showTip(e,it){
+  tip.innerHTML='<b>'+it.n+'. '+it.name+'</b>'+inr(it.amt)+' ('+(it.amt/TOTAL*100).toFixed(1)+'%)<br>'+CATS[it.cat].name;
+  tip.style.opacity=1;moveTip(e);
+}
+function moveTip(e){
+  const x=Math.min(e.clientX+14,innerWidth-270), y=e.clientY+16;
+  tip.style.left=x+'px';tip.style.top=y+'px';
+}
+function buildWall(){
+  const wall=$('#wall');wall.innerHTML='';
+  const sorted=[...ITEMS].sort((a,b)=>b.amt-a.amt), target=TOTAL/5*1.15;
+  const rows=[];let cur=[],sum=0;
+  sorted.forEach(it=>{
+    if(cur.length && sum+it.amt>target){rows.push(cur);cur=[];sum=0}
+    cur.push(it);sum+=it.amt;
+  });
+  if(cur.length) rows.push(cur);
+  rows.forEach(r=>{
+    const rs=r.reduce((s,i)=>s+i.amt,0);
+    const c=document.createElement('div');c.className='course';c.style.flex=rs+' 1 0';
+    r.forEach(it=>{
+      const b=document.createElement('button');
+      b.className='brick';b.dataset.cat=it.cat;b.dataset.n=it.n;
+      b.style.flex=it.amt+' 1 0';b.style.background=CATS[it.cat].color;b.style.color=CATS[it.cat].text;
+      b.setAttribute('aria-label',it.name+', '+inr(it.amt));
+      b.innerHTML='<b>'+it.name+'</b><span>'+inr(it.amt)+'</span>';
+      b.addEventListener('mouseenter',e=>showTip(e,it));
+      b.addEventListener('mousemove',moveTip);
+      b.addEventListener('mouseleave',()=>tip.style.opacity=0);
+      b.addEventListener('click',()=>jumpTo(it.n));
+      c.appendChild(b);
+    });
+    wall.appendChild(c);
+  });
+  requestAnimationFrame(markTiny);
+}
+function markTiny(){
+  document.querySelectorAll('.brick').forEach(b=>b.classList.toggle('tiny',b.offsetWidth<86||b.offsetHeight<46));
+}
+addEventListener('resize',markTiny);
+
+function jumpTo(n){
+  activeCat=null;syncCat();$('#q').value='';renderTable();
+  const row=document.querySelector('tr.item[data-n="'+n+'"]');
+  if(!row) return;
+  openRow(row,true);
+  row.scrollIntoView({behavior:'smooth',block:'center'});
+  row.classList.remove('flash');void row.offsetWidth;row.classList.add('flash');
+}
+
+/* ---------- legend / categories ---------- */
+const catTotals={};
+Object.keys(CATS).forEach(k=>catTotals[k]=ITEMS.filter(i=>i.cat===k).reduce((s,i)=>s+i.amt,0));
+function buildLegend(){
+  const l=$('#legend');
+  Object.keys(CATS).forEach(k=>{
+    const b=document.createElement('button');b.dataset.cat=k;b.setAttribute('aria-pressed','false');
+    b.innerHTML='<span class="dot" style="background:'+CATS[k].color+'"></span>'+CATS[k].name;
+    b.onclick=()=>setCat(k);l.appendChild(b);
+  });
+}
+function setCat(k){activeCat=(activeCat===k?null:k);syncCat();renderTable();}
+function syncCat(){
+  document.querySelectorAll('.legend button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.cat===activeCat));
+  document.querySelectorAll('.brick').forEach(b=>b.classList.toggle('dim',!!activeCat&&b.dataset.cat!==activeCat));
+  document.querySelectorAll('.cat').forEach(b=>b.classList.toggle('on',b.dataset.cat===activeCat));
+  document.querySelectorAll('#donutSvg circle').forEach(c=>c.classList.toggle('on',c.dataset.cat===activeCat));
+  $('#catSel').value=activeCat||'all';
+  updateDonutMid();
+}
+function buildCats(){
+  const box=$('#cats');
+  Object.keys(CATS).sort((a,b)=>catTotals[b]-catTotals[a]).forEach(k=>{
+    const cnt=ITEMS.filter(i=>i.cat===k);
+    const b=document.createElement('button');b.className='cat';b.dataset.cat=k;
+    b.innerHTML='<span class="dot" style="background:'+CATS[k].color+'"></span><span class="nm">'+CATS[k].name+'</span><span class="v">'+inr(catTotals[k])+' · '+(catTotals[k]/TOTAL*100).toFixed(1)+'%</span><small>'+cnt.map(i=>i.name).join(', ')+'</small>';
+    b.onclick=()=>setCat(k);
+    box.appendChild(b);
+  });
+}
+function buildDonut(){
+  const svg=$('#donutSvg'), r=38, C=2*Math.PI*r;let off=0;
+  Object.keys(CATS).sort((a,b)=>catTotals[b]-catTotals[a]).forEach(k=>{
+    const len=catTotals[k]/TOTAL*C;
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',50);c.setAttribute('cy',50);c.setAttribute('r',r);
+    c.setAttribute('stroke',CATS[k].color);
+    c.setAttribute('stroke-dasharray',(len-.6)+' '+(C-len+.6));
+    c.setAttribute('stroke-dashoffset',-off);c.dataset.cat=k;
+    c.addEventListener('mouseenter',()=>{$('#dMid').textContent=inr(catTotals[k]);$('#dLbl').textContent=CATS[k].name+' · '+(catTotals[k]/TOTAL*100).toFixed(1)+'%'});
+    c.addEventListener('mouseleave',updateDonutMid);
+    c.addEventListener('click',()=>setCat(k));
+    svg.appendChild(c);off+=len;
+  });
+}
+function updateDonutMid(){
+  if(activeCat){$('#dMid').textContent=inr(catTotals[activeCat]);$('#dLbl').textContent=CATS[activeCat].name+' · '+(catTotals[activeCat]/TOTAL*100).toFixed(1)+'%'}
+  else{$('#dMid').textContent=inr(TOTAL);$('#dLbl').textContent='Total estimate'}
+}
+
+/* ---------- areas ---------- */
+const AREAS=[
+  {l:'Ground floor',v:100,c:'#4A5A63',n:'Slab casting alone'},
+  {l:'First floor',v:450,c:'#8C3B2B',n:'12.5 ft × 36 ft room area'},
+  {l:'Residential built-up',v:550,c:'#3A7573',n:'100 sq.ft ground floor + 450 sq.ft first floor'},
+  {l:'Shed',v:630,c:'#C99A2E',n:'Priced separately from the residential area'}
+];
+function buildAreas(){
+  const box=$('#areas'),small=box.querySelector('small');
+  AREAS.forEach(a=>{
+    const d=document.createElement('div');d.className='area-row';
+    d.innerHTML='<div class="top"><span>'+a.l+'</span><span>'+a.v+' sq.ft</span></div><div class="track"><div class="fill" style="background:'+a.c+'" data-w="'+(a.v/630*100)+'"></div></div>';
+    d.addEventListener('mouseenter',()=>small.textContent=a.l+': '+a.n+'.');
+    d.addEventListener('click',()=>small.textContent=a.l+': '+a.n+'.');
+    box.insertBefore(d,small);
+  });
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){box.querySelectorAll('.fill').forEach(f=>f.style.width=f.dataset.w+'%');io.disconnect()}})},{threshold:.3});
+  io.observe(box);
+}
+
+/* ---------- sequence ---------- */
+let stageIdx=0;
+function buildSteps(){
+  const s=$('#steps');
+  STAGES.forEach((st,i)=>{
+    const b=document.createElement('button');b.setAttribute('role','tab');
+    b.innerHTML=st.name+'<small>'+st.sub+'</small>';
+    b.onclick=()=>{stageIdx=i;renderStage()};
+    s.appendChild(b);
+  });
+  renderStage();
+}
+function renderStage(){
+  document.querySelectorAll('#steps button').forEach((b,i)=>b.setAttribute('aria-selected',i===stageIdx));
+  const st=STAGES[stageIdx], its=st.items.map(byNo), sum=its.reduce((s,i)=>s+i.amt,0);
+  $('#stage').innerHTML='<p>'+st.text+'</p><div class="chips">'+its.map(i=>'<button class="chip" data-n="'+i.n+'">'+i.name+'<b>'+inr(i.amt)+'</b></button>').join('')+'</div><div class="sum">Stage cost: '+inr(sum)+' ('+(sum/TOTAL*100).toFixed(1)+'% of the estimate)</div>';
+  document.querySelectorAll('#stage .chip').forEach(c=>c.onclick=()=>jumpTo(+c.dataset.n));
+}
+
+/* ---------- table ---------- */
+let allOpen=false;
+function buildSelect(){
+  const s=$('#catSel');
+  s.innerHTML='<option value="all">All categories</option>'+Object.keys(CATS).map(k=>'<option value="'+k+'">'+CATS[k].name+'</option>').join('');
+  s.onchange=()=>{activeCat=s.value==='all'?null:s.value;syncCat();renderTable()};
+}
+function renderTable(){
+  const q=$('#q').value.trim().toLowerCase(), sort=$('#sortSel').value;
+  let list=ITEMS.filter(i=>(!activeCat||i.cat===activeCat)&&(!q||(i.name+' '+i.desc+' '+i.basis+' '+CATS[i.cat].name).toLowerCase().includes(q)));
+  if(sort==='desc') list.sort((a,b)=>b.amt-a.amt);
+  else if(sort==='asc') list.sort((a,b)=>a.amt-b.amt);
+  else list.sort((a,b)=>a.n-b.n);
+  const tb=$('#tbody');
+  if(!list.length){tb.innerHTML='<tr><td colspan="3">No items match. Clear the search or choose another category.</td></tr>'}
+  else tb.innerHTML=list.map(i=>'<tr class="item" data-n="'+i.n+'" tabindex="0" aria-expanded="'+allOpen+'"><td class="nm"><span class="no">'+i.n+'.</span>'+i.name+'</td><td><span class="pill"><span class="dot" style="background:'+CATS[i.cat].color+'"></span>'+CATS[i.cat].name+'</span></td><td class="r amt">'+inr(i.amt)+'<span class="share"><i style="width:'+(i.amt/302400*100)+'%;background:'+CATS[i.cat].color+'"></i></span></td></tr>'+
+    '<tr class="detail" data-for="'+i.n+'"'+(allOpen?'':' hidden')+'><td colspan="3"><p>'+i.desc+'</p><p class="basis"><b>Costing basis:</b> '+i.basis+'</p></td></tr>').join('');
+  const sum=list.reduce((s,i)=>s+i.amt,0);
+  $('#footLabel').textContent=list.length===ITEMS.length?'Final estimated cost':'Selected '+list.length+' of '+ITEMS.length+' items';
+  $('#footAmt').textContent=inr(sum);
+  tb.querySelectorAll('tr.item').forEach(r=>{
+    r.onclick=()=>openRow(r);
+    r.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openRow(r)}};
+  });
+}
+function openRow(r,forceOpen){
+  const d=document.querySelector('tr.detail[data-for="'+r.dataset.n+'"]');
+  const show=forceOpen?true:d.hidden;
+  d.hidden=!show;r.setAttribute('aria-expanded',show);
+}
+
+/* ---------- bars ---------- */
+function buildBars(){
+  const box=$('#hbars'),max=Math.max(...ITEMS.map(i=>i.amt));
+  [...ITEMS].sort((a,b)=>b.amt-a.amt).forEach(i=>{
+    const d=document.createElement('div');d.className='hb';
+    d.innerHTML='<span>'+i.n+'. '+i.name+'</span><div class="t"><i data-w="'+(i.amt/max*100)+'" style="background:'+CATS[i.cat].color+'"></i></div><span class="a">'+inr(i.amt)+'</span>';
+    box.appendChild(d);
+  });
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){box.querySelectorAll('i').forEach(f=>f.style.width=f.dataset.w+'%');io.disconnect()}})},{threshold:.15});
+  io.observe(box);
+}
+
+/* ---------- calculator ---------- */
+function calc(){
+  const sa=+$('#cShedA').value||0, sr=+$('#cShedR').value||0, bn=+$('#cBrN').value||0, br=+$('#cBrR').value||0;
+  const lab=+$('#cLab').value, mv=+$('#cVar').value;
+  $('#oLab').textContent=(lab>0?'+':'')+lab+'%';$('#oVar').textContent=(mv>0?'+':'')+mv+'%';
+  const shed=sa*sr, brickOther=134600-11000*10, brick=bn*br+brickOther, labour=275000*(1+lab/100);
+  const rest=TOTAL-302400-134600-275000;
+  const base=rest+shed+brick+labour, vari=base*mv/100, total=base+vari, diff=total-TOTAL;
+  $('#rTotal').textContent=inr(total);
+  const dl=$('#rDelta');
+  dl.className='delta '+(diff>0?'up':diff<0?'down':'');
+  dl.textContent=diff===0?'Same as the estimate':(diff>0?'+ ':'− ')+inr(Math.abs(diff))+' vs ₹17,08,300 ('+(diff/TOTAL*100).toFixed(1)+'%)';
+  $('#rWords').textContent=rupeesWords(total);
+  $('#rBreak').innerHTML=[['Shed',shed],['Brick work',brick],['Civil labour',labour],['All other items',rest],['Market variation',vari]].map(r=>'<div><span>'+r[0]+'</span><span>'+(r[1]<0?'− ':'')+inr(Math.abs(r[1]))+'</span></div>').join('');
+}
+function resetCalc(){
+  $('#cShedA').value=630;$('#cShedR').value=480;$('#cBrN').value=11000;$('#cBrR').value=10;$('#cLab').value=0;$('#cVar').value=0;calc();
+}
+
+/* ---------- init ---------- */
+buildWall();buildLegend();buildCats();buildDonut();buildAreas();buildSteps();buildSelect();renderTable();buildBars();calc();
+$('#q').addEventListener('input',renderTable);
+$('#sortSel').addEventListener('change',renderTable);
+$('#toggleAll').addEventListener('click',e=>{allOpen=!allOpen;e.target.textContent=allOpen?'Collapse all':'Expand all';renderTable()});
+['cShedA','cShedR','cBrN','cBrR','cLab','cVar'].forEach(id=>$('#'+id).addEventListener('input',calc));
+$('#reset').addEventListener('click',resetCalc);
+</script>
+</body>
+</html>
